@@ -1,4 +1,5 @@
 // From BayMinimum/MealTweet
+const offlineData = require("./meal_offline")
 module.exports = function (callback) {
     'use strict';
     let cheerio = require('cheerio');
@@ -87,5 +88,14 @@ function findMeal($, yyyy, mm, dd, callback){
             flag = true
         }
     });
-    if(!flag) callback(meal)
+
+    if (!flag) {
+        let k = 0
+        while (k < 3) {
+            if (!meal[k]) meal[k] = offlineData[k][lookupDate]
+            if (!meal[k]) meal[k] = ""
+            k += 1
+        }
+        callback(meal)
+    }
 }
