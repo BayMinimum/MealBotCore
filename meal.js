@@ -39,65 +39,53 @@ module.exports = function (callback) {
 
     // pass meal as [breakfast, lunch, dinner] to callback func
     let parseMeal = function (html) {
-        let meals = [];
         let $ = cheerio.load(html, {decodeEntities: false}); // option to avoid unicode hangul issue
-
-        let meal = [];
-        $(".meal").find('ul').each((i, elem) => {
-            let chunk = "";
-            let flag = false
-            $(elem).find('li').each((j, elem) => {
-                if(flag) chunk += "\n"
-                else flag = true
-                    chunk += $(elem).toString()
-                        .replace("<li>", "")
-                        .replace("</li>", "")
-                        .replace(/ /g, "")
-                        .replace(/amp;/g, "");
-                }
-            );
-            if(chunk.charAt(chunk.length-1)==='\n') chunk=chunk.substring(0, chunk.length-1);
-            meal.push(chunk);
-        });
-        meals.push(meal);
-
-        function generateLookupDate(yyyy, mm, dd){
-            let target = `${yyyy}-`;
-            if(mm<10) target += `0${mm}-`;
-            else target += `${mm}-`;
-            if(dd<10) target += `0${dd}`;
-            else target += `${dd}`;
-            return target
-        }
-
-        let lookupDate = generateLookupDate(yyyy, mm, dd+1);
-        $(".meal-con").find('tr').each((i, elem)=>{
-            if($(elem).find('th').toString().indexOf(lookupDate)>=0){
-                let meal = [];
-                $(elem).find('li').each((j, elem) => {
-                        let chunk = $(elem).toString()
-                            .replace("<li>", "")
-                            .replace("</li>", "")
-                            .replace(/ /g, "")
-                            .replace(/amp;/g, "")
-                            .replace("[조식]", "")
-                            .replace("[중식]", "")
-                            .replace("[석식]", "")
-                            .replace(/,/g, "\n");
-                        try {
-                            if(chunk.charAt(chunk.length-1)==='\n') chunk = chunk.substring(0, chunk.length-1);
-                        }catch(exception){
-                            console.log(exception);
-                            console.log("Substring operation for meal chunk failed!");
-                        }
-                        meal.push(chunk);
-                    }
-                );
-                meals.push(meal);
-            }
-        });
-        while(meals.length<2) meals.push(["", "", ""]);
-        callback(meals);
+        findMeal($, yyyy, mm, dd, (todayMeal)=> {
+            findMeal($, yyyy, mm, dd+1, (tomorrowMeal) => {
+                callback([todayMeal, tomorrowMeal])
+            })
+        })
     };
 
 };
+
+function generateLookupDate(yyyy, mm, dd){
+    let target = `${yyyy}-`;
+    if(mm<10) target += `0${mm}-`;
+    else target += `${mm}-`;
+    if(dd<10) target += `0${dd}`;
+    else target += `${dd}`;
+    return target
+}
+
+function findMeal($, yyyy, mm, dd, callback){
+    let lookupDate = generateLookupDate(yyyy, mm, dd);
+    let flag = false
+    let meal = ["", "", ""];
+    $(".meal-con").find('tr').each((i, elem)=>{
+        if($(elem).find('th').toString().indexOf(lookupDate)>=0){
+            $(elem).find('li').each((j, elem) => {
+                    let chunk = $(elem).toString()
+                        .replace("<li>", "")
+                        .replace("</li>", "")
+                        .replace(/ /g, "")
+                        .replace(/amp;/g, "")
+                        .replace("[조식]", "")
+                        .replace("[중식]", "")
+                        .replace("[석식]", "")
+                        .replace(/,/g, "\n");
+                    try {
+                        if(chunk.charAt(chunk.length-1)==='\n') chunk = chunk.substring(0, chunk.length-1);
+                    }catch(exception){
+                        console.log(exception);
+                        console.log("Substring operation for meal chunk failed!");
+                    }
+                    meal[j] = chunk;
+                }
+            );
+            callback(meal)
+            flag = true
+        }
+    });
+    if(!flag) callback(meal)
+}
