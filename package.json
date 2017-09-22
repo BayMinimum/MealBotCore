@@ -1,0 +1,19 @@
+{
+  "name": "meal_bot_core",
+  "version": "0.7.0",
+  "description": "KSA meal & snack data API server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BayMinimum/MealBotCore.git"
+  },
+  "author": "BayMinimum <bearksb1115@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BayMinimum/MealBotCore/issues"
+  },
+  "homepage": "https://github.com/BayMinimum/MealBotCore#readme"
+}
