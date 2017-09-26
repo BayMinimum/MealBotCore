@@ -7,7 +7,7 @@ module.exports=function (callback) {
 
     let options = {
         host: "gaonnuri.ksain.net",
-        path: "/xe/"
+        path: "/xe/?mid=login"
     };
 
     // get html data from school website
@@ -24,16 +24,13 @@ module.exports=function (callback) {
     });
 
     let parseSnack =function (html) {
+        console.log(html)
         let $ = cheerio.load(html, {decodeEntities: false}); // option to avoid unicode hangul issue
         let now = new time.Date();
         now.setTimezone("Asia/Seoul");
         let dd=now.getDate();
 
-        let snack;
-        let date_text = $('.food').parent().parent().find('.date').html();
-        let day = date_text.substring(date_text.indexOf('/')+1,date_text.indexOf((')')));
-        if(day==dd) snack = $(".food").parent().next().next().next().find(".menu").html();
-        else snack=$(".food").last().parent().find(".menu").html();
+        let snack = $(".snack").first().parent().find(".menu").html()
         if(snack.indexOf("정보")>=0 && snack.indexOf("없음")>=0) snack = "";
         try {
             if(snack.charAt(0)===' ') snack = snack.substring(1, snack.length);
