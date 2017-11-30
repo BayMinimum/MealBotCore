@@ -8,7 +8,7 @@ module.exports=function (callback) {
 
     let now = new time.Date()
     now.setTimezone("Asia/Seoul")
-    const lookupDate = generateLookupDate(now.getFullYear(), now.getMonth(), now.getDate())
+    const lookupDate = generateLookupDate(now.getFullYear(), now.getMonth()+1, now.getDate())
 
     let options = {
         host: "gaonnuri.ksain.net",
