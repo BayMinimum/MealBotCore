@@ -1,6 +1,11 @@
 const meal = require("./meal")
 const snack = require("./snack")
 
+module.exports = {
+    meal,
+    snack
+}
+
 module.exports.getData = function (req, res) {
     if (req.body.type == "meal") {
         meal((data) => {

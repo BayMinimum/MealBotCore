@@ -1,5 +1,4 @@
 // From BayMinimum/MealTweet
-const offlineData = require("./snack_offline")
 module.exports=function (callback) {
     'use strict';
     let cheerio = require('cheerio');
@@ -42,7 +41,6 @@ module.exports=function (callback) {
             console.log(exception);
             console.log("Substring operation for snack failed!");
         }
-        if (!snack) snack = offlineData[lookupDate]
         if (!snack) snack = ""
         callback(snack)
     };
@@ -50,9 +48,7 @@ module.exports=function (callback) {
     request.on('error', function () {
         console.log("Network error");
         console.log(lookupDate)
-        let snack = offlineData[lookupDate]
-        if (!snack) snack = ""
-        callback(snack)
+        callback("")
     });
 
     request.end();
