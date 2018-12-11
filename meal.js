@@ -59,6 +59,28 @@ function generateLookupDate(yyyy, mm, dd) {
   return target
 }
 
+function emojifyAllergyInfo(mealstr){
+  return mealstr.replace(/①/g, "🥚")
+                .replace(/②/g, "🥛")
+                .replace(/③/g, "(메밀)")
+                .replace(/④/g, "🥜")
+                .replace(/⑤/g, "(대두)")
+                .replace(/⑥/g, "🍞")
+                .replace(/⑦/g, "🐟")
+                .replace(/⑧/g, "🦀")
+                .replace(/⑨/g, "🍤")
+                .replace(/⑩/g, "🐷")
+                .replace(/⑪/g, "🍑")
+                .replace(/⑫/g, "🍅")
+                .replace(/⑬/g, "(아황산류)")
+                .replace(/⑭/g, "(호두)")
+                .replace(/⑮/g, "🐔")
+                .replace(/⑯/g, "🐂")
+                .replace(/⑰/g, "🦑")
+                .replace(/⑱/g, "🐚")
+                .replace(/⑲/g, "🌲")
+}
+
 function findMeal($, yyyy, mm, dd, callback) {
   let lookupDate = generateLookupDate(yyyy, mm, dd);
   let flag = false
@@ -85,7 +107,6 @@ function findMeal($, yyyy, mm, dd, callback) {
           meal[j] = chunk;
         }
       );
-      callback(meal)
       flag = true
     }
   });
@@ -97,6 +118,13 @@ function findMeal($, yyyy, mm, dd, callback) {
       if (!meal[k]) meal[k] = ""
       k += 1
     }
-    callback(meal)
   }
+
+  k = 0
+  while (k < 3) {
+    meal[k] = emojifyAllergyInfo(meal[k])
+    k += 1
+  }
+
+  callback(meal)
 }
