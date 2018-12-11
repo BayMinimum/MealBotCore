@@ -64,7 +64,7 @@ function emojifyAllergyInfo(mealstr){
                 .replace(/②/g, "🥛")
                 .replace(/③/g, "(메밀)")
                 .replace(/④/g, "🥜")
-                .replace(/⑤/g, "(대두)")
+                .replace(/⑤/g, "🇧")
                 .replace(/⑥/g, "🍞")
                 .replace(/⑦/g, "🐟")
                 .replace(/⑧/g, "🦀")
