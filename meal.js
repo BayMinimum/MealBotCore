@@ -74,7 +74,8 @@ function findMeal($, yyyy, mm, dd, callback) {
             .replace("[조식]", "")
             .replace("[중식]", "")
             .replace("[석식]", "")
-            .replace(/,/g, "\n");
+            .replace(/,/g, "\n")
+            .replace(/\n\n/g, "\n");
           try {
             if (chunk.charAt(chunk.length - 1) === '\n') chunk = chunk.substring(0, chunk.length - 1);
           } catch (exception) {
